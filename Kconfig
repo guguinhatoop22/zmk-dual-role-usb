@@ -1,0 +1,52 @@
+# Copyright (c) 2026 guguinhatoop22
+# SPDX-License-Identifier: MIT
+
+menuconfig ZMK_DUAL_ROLE_USB
+    bool "ZMK USB/dongle dual-role split half"
+    depends on ZMK_SPLIT && ZMK_SPLIT_BLE && ZMK_SPLIT_ROLE_CENTRAL
+    default n
+    help
+      Enable dynamic dual-role switching (Central when USB VBUS is connected,
+      Peripheral when on battery communicating with a dongle central).
+
+config SOFLE_DUAL_ROLE
+    bool "Legacy alias for ZMK_DUAL_ROLE_USB"
+    select ZMK_DUAL_ROLE_USB
+    default n
+
+if ZMK_DUAL_ROLE_USB || SOFLE_DUAL_ROLE
+
+config ZMK_SPLIT_BLE_PERIPHERAL_STACK_SIZE
+    int
+    default 756
+
+config ZMK_SPLIT_BLE_PERIPHERAL_PRIORITY
+    int
+    default 5
+
+config ZMK_SPLIT_BLE_PERIPHERAL_POSITION_QUEUE_SIZE
+    int
+    default 10
+
+config BT_PERIPHERAL
+    default y
+
+config ZMK_DUAL_ROLE_PROMOTE_DELAY_MS
+    int "Delay in ms without central connected before promoting to central"
+    default 6000
+
+config SOFLE_DUAL_ROLE_PROMOTE_DELAY_MS
+    int "Legacy alias for ZMK_DUAL_ROLE_PROMOTE_DELAY_MS"
+    default ZMK_DUAL_ROLE_PROMOTE_DELAY_MS
+
+endif # ZMK_DUAL_ROLE_USB || SOFLE_DUAL_ROLE
+
+config ZMK_SPLIT_PERIPHERAL_OPEN_ADV
+    bool "Split peripheral always advertises undirected (accepts dongle and Left)"
+    depends on ZMK_SPLIT && ZMK_SPLIT_BLE && !ZMK_SPLIT_ROLE_CENTRAL
+    default n
+
+config SOFLE_SPLIT_PERIPHERAL_OPEN_ADV
+    bool "Legacy alias for ZMK_SPLIT_PERIPHERAL_OPEN_ADV"
+    select ZMK_SPLIT_PERIPHERAL_OPEN_ADV
+    default n

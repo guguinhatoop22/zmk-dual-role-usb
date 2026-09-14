@@ -1,0 +1,5 @@
+name: zmk-dual-role-usb
+build:
+  settings:
+    kconfig: Kconfig
+    cmake: .
